@@ -90,11 +90,11 @@ export function Projects() {
   const cardBorder = "rgba(255,255,255,0.06)";
 
   return (
-    <div className="min-h-screen py-24">
-      <div className="max-w-7xl mx-auto px-6">
+    <div className="min-h-screen py-20 sm:py-24">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
 
         {/* Header */}
-        <div className="flex items-start justify-between mb-12">
+        <div className="flex flex-col gap-6 sm:gap-8 md:flex-row md:items-start md:justify-between mb-10 sm:mb-12">
           <div>
             <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-amber-400 text-[13px] tracking-[3px] uppercase mb-3">
               Project Portfolio
@@ -102,7 +102,7 @@ export function Projects() {
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="text-[36px] md:text-[48px] tracking-tight mb-4"
+              className="text-[32px] sm:text-[36px] md:text-[48px] tracking-tight mb-4"
               style={{ fontFamily: "'Playfair Display', serif", fontWeight: 600 }}
             >
               Projects
@@ -116,7 +116,7 @@ export function Projects() {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               onClick={openAdd}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-lg text-[13px] text-black font-medium transition-all hover:scale-105 mt-8 shrink-0"
+              className="flex w-full sm:w-auto justify-center items-center gap-2 px-5 py-2.5 rounded-lg text-[13px] text-black font-medium transition-all hover:scale-105 md:mt-8 shrink-0"
               style={{ background: "linear-gradient(135deg, #FBBF24, #F59E0B)" }}
             >
               <Plus size={15} /> Tambah Proyek
@@ -125,20 +125,22 @@ export function Projects() {
         </div>
 
         {/* Filter tabs */}
-        <div className="flex flex-wrap gap-2 mb-10">
-          {categories.map((c) => (
-            <button
-              key={c}
-              onClick={() => setFilter(c)}
-              className={`px-4 py-2 rounded-full text-[13px] border transition-all ${
-                filter === c
-                  ? "bg-amber-400 text-black border-amber-400"
-                  : "border-white/10 text-white/50 hover:border-amber-400/30 hover:text-white/80"
-              }`}
-            >
-              {c}
-            </button>
-          ))}
+        <div className="-mx-4 mb-10 overflow-x-auto pb-2 sm:mx-0">
+          <div className="flex w-max gap-2 px-4 sm:px-0">
+            {categories.map((c) => (
+              <button
+                key={c}
+                onClick={() => setFilter(c)}
+                className={`whitespace-nowrap px-4 py-2 rounded-full text-[13px] border transition-all ${
+                  filter === c
+                    ? "bg-amber-400 text-black border-amber-400"
+                    : "border-white/10 text-white/50 hover:border-amber-400/30 hover:text-white/80"
+                }`}
+              >
+                {c}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Grid */}
@@ -167,7 +169,7 @@ export function Projects() {
                   />
                   {isAdmin && (
                     <div
-                      className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3"
+                      className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/55 to-transparent p-3 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3"
                       onClick={(e) => e.stopPropagation()}
                     >
                       <button
@@ -185,7 +187,7 @@ export function Projects() {
                     </div>
                   )}
                 </div>
-                <div className="p-5">
+                <div className="p-4 sm:p-5">
                   <p className="text-amber-400/80 text-[11px] tracking-[2px] uppercase mb-2">{project.category}</p>
                   <h3 className="text-[16px] mb-2 text-white/90 group-hover:text-white transition-colors">{project.title}</h3>
                   <p className="text-white/40 text-[13px] leading-relaxed line-clamp-2">{project.desc}</p>
@@ -422,7 +424,7 @@ export function Projects() {
                   </div>
                 </div>
 
-                <div className="flex gap-3 mt-6">
+                <div className="flex flex-col-reverse sm:flex-row gap-3 mt-6">
                   <button
                     onClick={handleSave}
                     className="flex-1 py-2.5 rounded-lg text-[14px] text-black font-medium transition-all hover:scale-[1.02]"
@@ -432,7 +434,7 @@ export function Projects() {
                   </button>
                   <button
                     onClick={() => setShowForm(false)}
-                    className="px-5 border border-white/10 rounded-lg text-[14px] text-white/50 hover:border-white/25 transition-colors"
+                    className="w-full sm:w-auto px-5 border border-white/10 rounded-lg text-[14px] text-white/50 hover:border-white/25 transition-colors"
                   >
                     Batal
                   </button>

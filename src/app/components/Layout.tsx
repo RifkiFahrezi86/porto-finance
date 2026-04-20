@@ -18,7 +18,7 @@ export function Layout() {
 
   return (
     <div
-      className="min-h-screen text-white"
+      className="min-h-screen overflow-x-hidden text-white"
       style={{
         fontFamily: "'Inter', sans-serif",
         background: "#020C1B",
@@ -42,22 +42,22 @@ export function Layout() {
           background: "rgba(2, 12, 27, 0.92)",
         }}
       >
-        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-3">
           <NavLink
             to="/"
-            className="shrink-0 flex items-center gap-3"
+            className="min-w-0 shrink flex items-center gap-3"
           >
             <div className="w-10 h-10 rounded-xl border border-amber-400/25 bg-amber-400/10 flex items-center justify-center text-amber-400 text-[13px] tracking-[2px] font-semibold">
               {personalInfo.name.split(" ").map(w => w[0]).join("").slice(0, 3).toUpperCase() || "IAN"}
             </div>
-            <div className="hidden sm:block leading-none">
+            <div className="min-w-0 leading-none">
               <p
-                className="text-[16px] text-white tracking-tight"
+                className="max-w-[150px] truncate text-[14px] sm:max-w-[220px] sm:text-[16px] text-white tracking-tight"
                 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 600 }}
               >
                 {personalInfo.name || "Finance Portfolio"}
               </p>
-              <p className="text-[11px] text-white/35 tracking-[2px] uppercase mt-1">
+              <p className="hidden sm:block text-[11px] text-white/35 tracking-[2px] uppercase mt-1 truncate max-w-[220px]">
                 {personalInfo.major || "Management and Capital Market"}
               </p>
             </div>
@@ -81,7 +81,7 @@ export function Layout() {
           </div>
 
           <div className="flex items-center gap-2">
-            <button className="md:hidden text-white/60 p-2" onClick={() => setOpen(!open)}>
+            <button className="md:hidden text-white/60 p-2 rounded-lg border border-white/10 hover:text-white hover:border-white/20 transition-colors" onClick={() => setOpen(!open)}>
               {open ? <X size={22} /> : <Menu size={22} />}
             </button>
           </div>
@@ -93,7 +93,7 @@ export function Layout() {
               initial={{ opacity: 0, y: -8 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
-              className="md:hidden border-t border-white/5 px-6 pb-4"
+              className="md:hidden border-t border-white/5 px-4 sm:px-6 pb-5"
               style={{ background: "rgba(2, 12, 27, 0.98)" }}
             >
               {navItems.map((item) => (
@@ -117,13 +117,13 @@ export function Layout() {
       </nav>
 
       {/* Content */}
-      <main className="relative z-10 pt-16">
+      <main className="relative z-10 pt-16 overflow-x-hidden">
         <Outlet />
       </main>
 
       {/* Footer */}
-      <footer className="relative z-10 border-t border-white/5 py-10">
-        <div className="max-w-7xl mx-auto px-6 flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+      <footer className="relative z-10 border-t border-white/5 py-8 sm:py-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
           <div>
             <p
               className="text-[20px] mb-2 text-white"
@@ -136,10 +136,10 @@ export function Layout() {
             </p>
           </div>
 
-          <div className="flex flex-col items-start md:items-end gap-3">
+          <div className="flex flex-col items-stretch sm:items-start md:items-end gap-3">
             <button
               onClick={toggleAdmin}
-              className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-[13px] transition-all border ${
+              className={`inline-flex w-full sm:w-auto justify-center items-center gap-2 px-4 py-2 rounded-lg text-[13px] transition-all border ${
                 isAdmin
                   ? "text-amber-400 border-amber-400/30 bg-amber-400/10"
                   : "text-white/45 border-white/10 hover:text-white/70 hover:border-white/20"

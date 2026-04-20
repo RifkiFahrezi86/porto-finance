@@ -68,11 +68,11 @@ export function Certificates() {
   const cardBg = "rgba(6, 23, 40, 0.8)";
 
   return (
-    <div className="min-h-screen py-24">
-      <div className="max-w-7xl mx-auto px-6">
+    <div className="min-h-screen py-20 sm:py-24">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
 
         {/* Header */}
-        <div className="flex items-start justify-between mb-12">
+        <div className="flex flex-col gap-6 sm:gap-8 md:flex-row md:items-start md:justify-between mb-10 sm:mb-12">
           <div>
             <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-amber-400 text-[13px] tracking-[3px] uppercase mb-3">
               Certification Record
@@ -80,7 +80,7 @@ export function Certificates() {
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="text-[36px] md:text-[48px] tracking-tight mb-4"
+              className="text-[32px] sm:text-[36px] md:text-[48px] tracking-tight mb-4"
               style={{ fontFamily: "'Playfair Display', serif", fontWeight: 600 }}
             >
               Certificates
@@ -94,7 +94,7 @@ export function Certificates() {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               onClick={openAdd}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-lg text-[13px] text-black font-medium transition-all hover:scale-105 mt-8 shrink-0"
+              className="flex w-full sm:w-auto justify-center items-center gap-2 px-5 py-2.5 rounded-lg text-[13px] text-black font-medium transition-all hover:scale-105 md:mt-8 shrink-0"
               style={{ background: "linear-gradient(135deg, #FBBF24, #F59E0B)" }}
             >
               <Plus size={15} /> Tambah Sertifikat
@@ -103,7 +103,7 @@ export function Certificates() {
         </div>
 
         {/* Grid */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
           {certificates.map((cert, i) => (
             <motion.div
               key={cert.id}
@@ -130,7 +130,7 @@ export function Certificates() {
                 </div>
                 {isAdmin && (
                   <div
-                    className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3"
+                    className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/55 to-transparent p-3 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3"
                     onClick={(e) => e.stopPropagation()}
                   >
                     <button
@@ -148,7 +148,7 @@ export function Certificates() {
                   </div>
                 )}
               </div>
-              <div className="p-5">
+              <div className="p-4 sm:p-5">
                 <h3 className="text-[15px] mb-1 text-white/90 group-hover:text-white transition-colors">{cert.title}</h3>
                 <div className="flex items-center gap-1.5 text-white/40 text-[13px] mb-1">
                   <Building2 size={12} />
@@ -233,16 +233,16 @@ export function Certificates() {
             >
               <h3 className="text-[18px] mb-2">Hapus sertifikat?</h3>
               <p className="text-white/40 text-[14px] mb-6">Tindakan ini tidak bisa dibatalkan.</p>
-              <div className="flex gap-3">
+              <div className="flex flex-col-reverse sm:flex-row gap-3">
                 <button
                   onClick={() => { deleteCertificate(deleteConfirm!); setDeleteConfirm(null); }}
                   className="flex-1 bg-red-500 text-white py-2.5 rounded-lg text-[14px] hover:bg-red-400 transition-colors"
                 >
                   Hapus
                 </button>
-                <button
+                  <button
                   onClick={() => setDeleteConfirm(null)}
-                  className="px-5 border border-white/10 rounded-lg text-[14px] text-white/50 hover:border-white/25 transition-colors"
+                    className="w-full sm:w-auto px-5 border border-white/10 rounded-lg text-[14px] text-white/50 hover:border-white/25 transition-colors"
                 >
                   Batal
                 </button>
@@ -355,7 +355,7 @@ export function Certificates() {
                   </div>
                 </div>
 
-                <div className="flex gap-3 mt-6">
+                <div className="flex flex-col-reverse sm:flex-row gap-3 mt-6">
                   <button
                     onClick={handleSave}
                     className="flex-1 py-2.5 rounded-lg text-[14px] text-black font-medium transition-all hover:scale-[1.02]"
@@ -365,7 +365,7 @@ export function Certificates() {
                   </button>
                   <button
                     onClick={() => setShowForm(false)}
-                    className="px-5 border border-white/10 rounded-lg text-[14px] text-white/50 hover:border-white/25 transition-colors"
+                    className="w-full sm:w-auto px-5 border border-white/10 rounded-lg text-[14px] text-white/50 hover:border-white/25 transition-colors"
                   >
                     Batal
                   </button>

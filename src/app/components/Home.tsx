@@ -86,7 +86,7 @@ function EditProfileModal({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto py-10 px-4"
+        className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto py-6 sm:py-10 px-3 sm:px-4"
         style={{ background: "rgba(0,0,0,0.75)", backdropFilter: "blur(8px)" }}
         onClick={(event) => event.target === event.currentTarget && onClose()}
       >
@@ -96,9 +96,9 @@ function EditProfileModal({
           className="w-full max-w-3xl rounded-3xl border border-white/10 overflow-hidden"
           style={{ background: "#071829" }}
         >
-          <div className="flex items-center justify-between p-6 border-b border-white/8">
+          <div className="flex items-start justify-between gap-4 p-4 sm:p-6 border-b border-white/8">
             <div>
-              <h2 className="text-[20px]" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 600 }}>
+              <h2 className="text-[18px] sm:text-[20px]" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 600 }}>
                 Edit Informasi Profil
               </h2>
               <p className="text-white/35 text-[12px] mt-1">
@@ -110,7 +110,7 @@ function EditProfileModal({
             </button>
           </div>
 
-          <div className="p-6 space-y-6 overflow-y-auto max-h-[78vh]">
+          <div className="p-4 sm:p-6 space-y-6 overflow-y-auto max-h-[78vh]">
             <div className="grid lg:grid-cols-[0.8fr_1.2fr] gap-6">
               <div className="rounded-2xl p-5 space-y-4" style={sectionStyle}>
                 <div>
@@ -312,11 +312,11 @@ function EditProfileModal({
             </div>
           </div>
 
-          <div className="flex justify-end gap-3 p-6 border-t border-white/8">
-            <button onClick={onClose} className="px-5 py-2 rounded-lg text-[13px] text-white/60 border border-white/10 hover:border-white/20 hover:text-white transition-colors">
+          <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-3 p-4 sm:p-6 border-t border-white/8">
+            <button onClick={onClose} className="w-full sm:w-auto px-5 py-2 rounded-lg text-[13px] text-white/60 border border-white/10 hover:border-white/20 hover:text-white transition-colors">
               Batal
             </button>
-            <button onClick={onSave} className="inline-flex items-center gap-2 px-6 py-2 rounded-lg text-[13px] text-black font-semibold transition-all hover:scale-105" style={{ background: "linear-gradient(135deg, #FBBF24, #F59E0B)" }}>
+            <button onClick={onSave} className="inline-flex w-full sm:w-auto justify-center items-center gap-2 px-6 py-2 rounded-lg text-[13px] text-black font-semibold transition-all hover:scale-105" style={{ background: "linear-gradient(135deg, #FBBF24, #F59E0B)" }}>
               <Save size={14} /> Simpan
             </button>
           </div>
@@ -364,8 +364,8 @@ export function Home() {
       )}
 
       {isAdmin && (
-        <section className="pt-8 px-6">
-          <div className="max-w-7xl mx-auto rounded-2xl border border-amber-400/20 px-5 py-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between" style={{ background: "linear-gradient(135deg, rgba(251,191,36,0.10), rgba(6,23,40,0.85))" }}>
+        <section className="pt-6 sm:pt-8 px-4 sm:px-6">
+          <div className="max-w-7xl mx-auto rounded-2xl border border-amber-400/20 px-4 sm:px-5 py-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between" style={{ background: "linear-gradient(135deg, rgba(251,191,36,0.10), rgba(6,23,40,0.85))" }}>
             <div className="flex items-start gap-3">
               <div className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style={{ background: "rgba(251,191,36,0.14)", border: "1px solid rgba(251,191,36,0.22)" }}>
                 <Sparkles size={18} className="text-amber-400" />
@@ -377,7 +377,7 @@ export function Home() {
                 </p>
               </div>
             </div>
-            <button onClick={openEdit} className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-[13px] text-black font-semibold transition-all hover:scale-[1.02] shrink-0" style={{ background: "linear-gradient(135deg, #FBBF24, #F59E0B)" }}>
+            <button onClick={openEdit} className="inline-flex w-full md:w-auto items-center justify-center gap-2 px-5 py-3 rounded-xl text-[13px] text-black font-semibold transition-all hover:scale-[1.02] shrink-0" style={{ background: "linear-gradient(135deg, #FBBF24, #F59E0B)" }}>
               <Edit3 size={14} /> Edit Profil Lengkap
             </button>
           </div>
@@ -385,51 +385,51 @@ export function Home() {
       )}
 
       <section className="min-h-[calc(100vh-64px)] flex items-center relative overflow-hidden">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full blur-[120px] pointer-events-none" style={{ background: "radial-gradient(circle, rgba(251,191,36,0.08) 0%, transparent 70%)" }} />
-        <div className="absolute bottom-1/4 right-1/4 w-72 h-72 rounded-full blur-[120px] pointer-events-none" style={{ background: "radial-gradient(circle, rgba(56,189,248,0.08) 0%, transparent 70%)" }} />
+        <div className="absolute top-1/4 left-1/4 w-64 h-64 sm:w-96 sm:h-96 rounded-full blur-[100px] sm:blur-[120px] pointer-events-none" style={{ background: "radial-gradient(circle, rgba(251,191,36,0.08) 0%, transparent 70%)" }} />
+        <div className="absolute bottom-1/4 right-1/4 w-52 h-52 sm:w-72 sm:h-72 rounded-full blur-[100px] sm:blur-[120px] pointer-events-none" style={{ background: "radial-gradient(circle, rgba(56,189,248,0.08) 0%, transparent 70%)" }} />
 
-        <div className="max-w-7xl mx-auto px-6 w-full grid lg:grid-cols-[1.05fr_0.95fr] gap-14 items-center py-16 lg:py-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 w-full grid lg:grid-cols-[1.05fr_0.95fr] gap-10 lg:gap-14 items-center py-10 sm:py-16 lg:py-24">
           <motion.div initial={{ opacity: 0, x: -36 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.65 }}>
-            <div className="inline-flex items-center gap-2 bg-amber-400/10 border border-amber-400/20 rounded-full px-4 py-1.5 mb-6">
+            <div className="inline-flex max-w-full items-center gap-2 bg-amber-400/10 border border-amber-400/20 rounded-full px-3 sm:px-4 py-1.5 mb-5 sm:mb-6">
               <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
-              <span className="text-amber-400 text-[12px] tracking-[2px] uppercase">
+              <span className="text-amber-400 text-[11px] sm:text-[12px] tracking-[2px] uppercase truncate">
                 {personalInfo.major} - {personalInfo.university}
               </span>
             </div>
 
-            <h1 className="text-[42px] md:text-[62px] leading-[1.03] tracking-tight mb-4" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 600 }}>
+            <h1 className="text-[34px] sm:text-[42px] md:text-[62px] leading-[1.03] tracking-tight mb-4" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 600 }}>
               {personalInfo.name}
             </h1>
-            <p className="text-white/65 text-[15px] md:text-[16px] tracking-wide mb-3">{personalInfo.tagline}</p>
+            <p className="text-white/65 text-[14px] sm:text-[15px] md:text-[16px] tracking-wide mb-3">{personalInfo.tagline}</p>
             <p className="text-white/42 text-[15px] leading-relaxed max-w-2xl mb-6">{personalInfo.bio}</p>
 
             <div className="flex flex-wrap gap-3 mb-7">
               {personalInfo.email && (
-                <a href={`mailto:${personalInfo.email}`} className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-[13px] text-white/60 border border-white/10 hover:border-amber-400/30 hover:text-white transition-colors" style={{ background: "rgba(6, 23, 40, 0.55)" }}>
+                <a href={`mailto:${personalInfo.email}`} className="inline-flex w-full sm:w-auto items-center gap-2 rounded-full px-4 py-2 text-[13px] text-white/60 border border-white/10 hover:border-amber-400/30 hover:text-white transition-colors break-all" style={{ background: "rgba(6, 23, 40, 0.55)" }}>
                   <Mail size={14} className="text-amber-400" /> {personalInfo.email}
                 </a>
               )}
               {personalInfo.phone && (
-                <a href={`https://wa.me/${personalInfo.phone.replace(/\D/g, "")}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-[13px] text-white/60 border border-white/10 hover:border-amber-400/30 hover:text-white transition-colors" style={{ background: "rgba(6, 23, 40, 0.55)" }}>
+                <a href={`https://wa.me/${personalInfo.phone.replace(/\D/g, "")}`} target="_blank" rel="noopener noreferrer" className="inline-flex w-full sm:w-auto items-center gap-2 rounded-full px-4 py-2 text-[13px] text-white/60 border border-white/10 hover:border-amber-400/30 hover:text-white transition-colors break-all" style={{ background: "rgba(6, 23, 40, 0.55)" }}>
                   <Phone size={14} className="text-amber-400" /> {personalInfo.phone}
                 </a>
               )}
               {socialLinks.map((item) => (
-                <a key={item.label} href={item.href} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-[13px] text-white/60 border border-white/10 hover:border-amber-400/30 hover:text-white transition-colors" style={{ background: "rgba(6, 23, 40, 0.55)" }}>
+                <a key={item.label} href={item.href} target="_blank" rel="noopener noreferrer" className="inline-flex w-full sm:w-auto items-center justify-center sm:justify-start gap-2 rounded-full px-4 py-2 text-[13px] text-white/60 border border-white/10 hover:border-amber-400/30 hover:text-white transition-colors" style={{ background: "rgba(6, 23, 40, 0.55)" }}>
                   <item.icon size={14} className="text-amber-400" /> {item.label}
                 </a>
               ))}
             </div>
 
             <div className="flex flex-wrap gap-4 mb-8">
-              <Link to="/projects" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-[14px] text-black font-medium transition-all hover:scale-105" style={{ background: "linear-gradient(135deg, #FBBF24, #F59E0B)" }}>
+              <Link to="/projects" className="inline-flex w-full sm:w-auto justify-center items-center gap-2 px-6 py-3 rounded-xl text-[14px] text-black font-medium transition-all hover:scale-105" style={{ background: "linear-gradient(135deg, #FBBF24, #F59E0B)" }}>
                 Lihat Proyek <ArrowRight size={16} />
               </Link>
-              <Link to="/certificates" className="inline-flex items-center gap-2 border border-white/15 text-white/70 px-6 py-3 rounded-xl text-[14px] hover:border-amber-400/30 hover:text-white transition-all">
+              <Link to="/certificates" className="inline-flex w-full sm:w-auto justify-center items-center gap-2 border border-white/15 text-white/70 px-6 py-3 rounded-xl text-[14px] hover:border-amber-400/30 hover:text-white transition-all">
                 Lihat Sertifikat <ArrowRight size={16} />
               </Link>
               {isAdmin && (
-                <button onClick={openEdit} className="inline-flex items-center gap-2 border border-amber-400/25 text-amber-400 px-6 py-3 rounded-xl text-[14px] hover:bg-amber-400/10 transition-all">
+                <button onClick={openEdit} className="inline-flex w-full sm:w-auto justify-center items-center gap-2 border border-amber-400/25 text-amber-400 px-6 py-3 rounded-xl text-[14px] hover:bg-amber-400/10 transition-all">
                   <Edit3 size={16} /> Edit Profil
                 </button>
               )}
@@ -446,7 +446,7 @@ export function Home() {
           </motion.div>
 
           <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.7, delay: 0.15 }} className="flex justify-center lg:justify-end">
-            <div className="relative w-full max-w-[430px]">
+            <div className="relative w-full max-w-[360px] sm:max-w-[430px]">
               <div className="absolute -inset-3 rounded-[32px] blur-2xl opacity-40 pointer-events-none" style={{ background: "linear-gradient(135deg, rgba(251,191,36,0.35), transparent 60%)" }} />
               <div className="relative rounded-[32px] overflow-hidden border border-amber-400/20" style={{ background: "rgba(6, 23, 40, 0.68)", boxShadow: "0 24px 80px rgba(0,0,0,0.35)" }}>
                 <div className="absolute inset-x-0 top-0 h-28 pointer-events-none" style={{ background: "linear-gradient(180deg, rgba(2,12,27,0.2), transparent)" }} />
@@ -455,12 +455,12 @@ export function Home() {
                 </div>
 
                 {isAdmin && (
-                  <button onClick={openEdit} className="absolute top-4 right-4 inline-flex items-center gap-2 px-4 py-2 rounded-full text-[12px] text-black font-semibold shadow-lg" style={{ background: "linear-gradient(135deg, #FBBF24, #F59E0B)" }}>
+                  <button onClick={openEdit} className="absolute top-3 right-3 sm:top-4 sm:right-4 inline-flex items-center gap-2 px-3 sm:px-4 py-2 rounded-full text-[11px] sm:text-[12px] text-black font-semibold shadow-lg" style={{ background: "linear-gradient(135deg, #FBBF24, #F59E0B)" }}>
                     <ImagePlus size={14} /> Ganti Foto
                   </button>
                 )}
 
-                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.45 }} className="absolute left-5 right-5 bottom-5 rounded-2xl px-5 py-4 border border-amber-400/18 backdrop-blur-xl" style={{ background: "rgba(4, 18, 34, 0.88)" }}>
+                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.45 }} className="absolute left-3 right-3 bottom-3 sm:left-5 sm:right-5 sm:bottom-5 rounded-2xl px-4 sm:px-5 py-3 sm:py-4 border border-amber-400/18 backdrop-blur-xl" style={{ background: "rgba(4, 18, 34, 0.88)" }}>
                   <div className="flex items-start justify-between gap-3">
                     <div>
                       <p className="text-amber-400 text-[15px] font-semibold mb-1">{personalInfo.major}</p>
@@ -474,7 +474,7 @@ export function Home() {
                   </div>
                 </motion.div>
 
-                <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.55 }} className="absolute top-5 left-5 rounded-2xl px-4 py-3 border border-white/10" style={{ background: "rgba(6, 23, 40, 0.92)" }}>
+                <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.55 }} className="absolute top-3 left-3 sm:top-5 sm:left-5 rounded-2xl px-3 sm:px-4 py-2.5 sm:py-3 border border-white/10" style={{ background: "rgba(6, 23, 40, 0.92)" }}>
                   <div className="flex items-center gap-2">
                     <TrendingUp size={14} className="text-green-400" />
                     <div>
@@ -489,12 +489,12 @@ export function Home() {
         </div>
       </section>
 
-      <section className="py-16 border-t border-white/5">
-        <div className="max-w-7xl mx-auto px-6">
+      <section className="py-12 sm:py-16 border-t border-white/5">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {personalInfo.stats.map((stat, index) => (
-              <motion.div key={`${stat.label}-${index}`} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.08 }} className="rounded-2xl p-6 border border-white/5 hover:border-amber-400/20 transition-all" style={{ background: "rgba(6, 23, 40, 0.65)" }}>
-                <p className="text-[34px] text-amber-400 mb-1" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 700 }}>
+              <motion.div key={`${stat.label}-${index}`} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.08 }} className="rounded-2xl p-4 sm:p-6 border border-white/5 hover:border-amber-400/20 transition-all" style={{ background: "rgba(6, 23, 40, 0.65)" }}>
+                <p className="text-[28px] sm:text-[34px] text-amber-400 mb-1" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 700 }}>
                   {stat.num}
                 </p>
                 <p className="text-white/40 text-[13px]">{stat.label}</p>
@@ -504,8 +504,8 @@ export function Home() {
         </div>
       </section>
 
-      <section className="py-20 border-t border-white/5">
-        <div className="max-w-7xl mx-auto px-6">
+      <section className="py-14 sm:py-20 border-t border-white/5">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <motion.p initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-amber-400 text-[13px] tracking-[3px] uppercase mb-3">
             Academic Profile
           </motion.p>
@@ -519,7 +519,7 @@ export function Home() {
               { title: "Universitas", value: personalInfo.university, desc: "Lingkungan akademik tempat perjalanan belajar, riset, dan organisasi berkembang." },
               { title: "Tahun Studi", value: personalInfo.year, desc: "Rentang perjalanan yang menjadi konteks untuk proyek, sertifikat, dan pengalaman organisasi." },
             ].map((item) => (
-              <div key={item.title} className="rounded-2xl p-6 border border-white/6" style={{ background: "rgba(6, 23, 40, 0.62)" }}>
+              <div key={item.title} className="rounded-2xl p-5 sm:p-6 border border-white/6" style={{ background: "rgba(6, 23, 40, 0.62)" }}>
                 <p className="text-white/30 text-[11px] uppercase tracking-[2px] mb-2">{item.title}</p>
                 <p className="text-white text-[18px] mb-2" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 600 }}>{item.value}</p>
                 <p className="text-white/42 text-[13px] leading-relaxed">{item.desc}</p>
@@ -530,7 +530,7 @@ export function Home() {
           {personalInfo.education.length > 0 && (
             <div className="space-y-4">
               {personalInfo.education.map((edu, index) => (
-                <motion.div key={`${edu.school}-${index}`} initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.08 }} className="flex gap-6 items-start rounded-2xl p-6 border border-white/5 hover:border-amber-400/20 transition-all" style={{ background: "rgba(6, 23, 40, 0.62)" }}>
+                <motion.div key={`${edu.school}-${index}`} initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.08 }} className="flex flex-col sm:flex-row gap-4 sm:gap-6 items-start rounded-2xl p-5 sm:p-6 border border-white/5 hover:border-amber-400/20 transition-all" style={{ background: "rgba(6, 23, 40, 0.62)" }}>
                   <div className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0" style={{ background: "rgba(251,191,36,0.1)", border: "1px solid rgba(251,191,36,0.2)" }}>
                     <GraduationCap size={22} className="text-amber-400" />
                   </div>
@@ -547,19 +547,19 @@ export function Home() {
         </div>
       </section>
 
-      <section className="py-24 border-t border-white/5">
-        <div className="max-w-7xl mx-auto px-6">
+      <section className="py-16 sm:py-24 border-t border-white/5">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <motion.p initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-amber-400 text-[13px] tracking-[3px] uppercase mb-3">
             Focus Areas
           </motion.p>
           <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-[32px] md:text-[38px] tracking-tight mb-12" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 600 }}>
             Bidang Yang Sedang Saya Kembangkan
           </motion.h2>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {personalInfo.skills.map((skill, index) => {
               const Icon = SKILL_ICONS[index % SKILL_ICONS.length];
               return (
-                <motion.div key={`${skill.label}-${index}`} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.08 }} className="rounded-2xl p-6 border border-white/5 hover:border-amber-400/25 transition-all group" style={{ background: "rgba(6, 23, 40, 0.62)" }}>
+                <motion.div key={`${skill.label}-${index}`} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.08 }} className="rounded-2xl p-5 sm:p-6 border border-white/5 hover:border-amber-400/25 transition-all group" style={{ background: "rgba(6, 23, 40, 0.62)" }}>
                   <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4 transition-transform group-hover:scale-110" style={{ background: "rgba(251,191,36,0.1)", border: "1px solid rgba(251,191,36,0.2)" }}>
                     <Icon size={22} className="text-amber-400" />
                   </div>
@@ -572,9 +572,9 @@ export function Home() {
         </div>
       </section>
 
-      <section className="py-20 border-t border-white/5">
-        <div className="max-w-7xl mx-auto px-6">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="rounded-[28px] p-10 md:p-14 relative overflow-hidden border border-amber-400/15" style={{ background: "linear-gradient(135deg, rgba(251,191,36,0.08) 0%, rgba(6,23,40,0.84) 100%)" }}>
+      <section className="py-14 sm:py-20 border-t border-white/5">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="rounded-[28px] p-6 sm:p-10 md:p-14 relative overflow-hidden border border-amber-400/15" style={{ background: "linear-gradient(135deg, rgba(251,191,36,0.08) 0%, rgba(6,23,40,0.84) 100%)" }}>
             <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at center top, rgba(251,191,36,0.12) 0%, transparent 60%)" }} />
             <div className="relative grid lg:grid-cols-[1.2fr_0.8fr] gap-8 items-center">
               <div>
@@ -586,10 +586,10 @@ export function Home() {
                   Dari proyek analisis keuangan, sertifikat pelatihan, hingga pengalaman organisasi, seluruh bagian portfolio ini dirancang untuk menunjukkan proses belajar yang terarah dan relevan dengan bidang finance.
                 </p>
                 <div className="flex flex-wrap gap-4">
-                  <Link to="/organization" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-[14px] text-black font-medium transition-all hover:scale-105" style={{ background: "linear-gradient(135deg, #FBBF24, #F59E0B)" }}>
+                  <Link to="/organization" className="inline-flex w-full sm:w-auto justify-center items-center gap-2 px-6 py-3 rounded-xl text-[14px] text-black font-medium transition-all hover:scale-105" style={{ background: "linear-gradient(135deg, #FBBF24, #F59E0B)" }}>
                     Lihat Organisasi <ArrowRight size={16} />
                   </Link>
-                  <Link to="/contact" className="inline-flex items-center gap-2 border border-white/15 text-white/70 px-6 py-3 rounded-xl text-[14px] hover:border-amber-400/30 hover:text-white transition-all">
+                  <Link to="/contact" className="inline-flex w-full sm:w-auto justify-center items-center gap-2 border border-white/15 text-white/70 px-6 py-3 rounded-xl text-[14px] hover:border-amber-400/30 hover:text-white transition-all">
                     Hubungi Saya <ArrowRight size={16} />
                   </Link>
                 </div>

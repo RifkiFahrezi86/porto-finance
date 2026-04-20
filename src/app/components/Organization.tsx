@@ -68,7 +68,7 @@ function OrgModal({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto py-10 px-4"
+        className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto py-6 sm:py-10 px-3 sm:px-4"
         style={{ background: "rgba(0,0,0,0.75)", backdropFilter: "blur(8px)" }}
         onClick={(event) => event.target === event.currentTarget && onClose()}
       >
@@ -78,9 +78,9 @@ function OrgModal({
           className="w-full max-w-3xl rounded-3xl border border-white/10 overflow-hidden"
           style={{ background: "#071829" }}
         >
-          <div className="flex items-center justify-between p-6 border-b border-white/8">
+          <div className="flex items-start justify-between gap-4 p-4 sm:p-6 border-b border-white/8">
             <div>
-              <h2 className="text-[20px]" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 600 }}>
+              <h2 className="text-[18px] sm:text-[20px]" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 600 }}>
                 {"id" in initial ? "Edit Organisasi" : "Tambah Organisasi"}
               </h2>
               <p className="text-white/35 text-[12px] mt-1">
@@ -92,7 +92,7 @@ function OrgModal({
             </button>
           </div>
 
-          <div className="p-6 space-y-6 overflow-y-auto max-h-[78vh]">
+          <div className="p-4 sm:p-6 space-y-6 overflow-y-auto max-h-[78vh]">
             <div className="grid lg:grid-cols-[0.9fr_1.1fr] gap-6">
               <div className="rounded-2xl p-5 space-y-4" style={sectionStyle}>
                 <div>
@@ -235,11 +235,11 @@ function OrgModal({
             </div>
           </div>
 
-          <div className="flex justify-end gap-3 p-6 border-t border-white/8">
-            <button onClick={onClose} className="px-5 py-2 rounded-lg text-[13px] text-white/60 border border-white/10 hover:border-white/20 hover:text-white transition-colors">
+          <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-3 p-4 sm:p-6 border-t border-white/8">
+            <button onClick={onClose} className="w-full sm:w-auto px-5 py-2 rounded-lg text-[13px] text-white/60 border border-white/10 hover:border-white/20 hover:text-white transition-colors">
               Batal
             </button>
-            <button onClick={() => onSave(draft)} className="inline-flex items-center gap-2 px-6 py-2 rounded-lg text-[13px] text-black font-semibold transition-all hover:scale-105" style={{ background: "linear-gradient(135deg, #FBBF24, #F59E0B)" }}>
+            <button onClick={() => onSave(draft)} className="inline-flex w-full sm:w-auto justify-center items-center gap-2 px-6 py-2 rounded-lg text-[13px] text-black font-semibold transition-all hover:scale-105" style={{ background: "linear-gradient(135deg, #FBBF24, #F59E0B)" }}>
               <Save size={14} /> Simpan
             </button>
           </div>
@@ -263,14 +263,14 @@ function OrgCard({
   const [expanded, setExpanded] = useState(true);
 
   return (
-    <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="rounded-[28px] border border-white/8 overflow-hidden" style={{ background: "rgba(6, 23, 40, 0.72)", boxShadow: "0 18px 60px rgba(0,0,0,0.28)" }}>
-      <div className="relative aspect-[16/6] overflow-hidden border-b border-white/6">
+    <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="rounded-[24px] sm:rounded-[28px] border border-white/8 overflow-hidden" style={{ background: "rgba(6, 23, 40, 0.72)", boxShadow: "0 18px 60px rgba(0,0,0,0.28)" }}>
+      <div className="relative aspect-[5/4] sm:aspect-[16/6] overflow-hidden border-b border-white/6">
         <ImageWithFallback src={org.image} alt={org.name} className="w-full h-full object-cover" />
         <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(2,12,27,0.18), rgba(2,12,27,0.84))" }} />
-        <div className="absolute top-5 left-5 inline-flex items-center gap-2 px-4 py-2 rounded-full border border-amber-400/22 text-amber-400 text-[12px] tracking-[2px] uppercase" style={{ background: "rgba(2,12,27,0.65)" }}>
+        <div className="absolute top-4 left-4 sm:top-5 sm:left-5 inline-flex items-center gap-2 px-3 sm:px-4 py-2 rounded-full border border-amber-400/22 text-amber-400 text-[11px] sm:text-[12px] tracking-[2px] uppercase" style={{ background: "rgba(2,12,27,0.65)" }}>
           <TrendingUp size={14} /> {org.acronym}
         </div>
-        <div className="absolute right-5 top-5 flex items-center gap-2">
+        <div className="absolute right-4 top-4 sm:right-5 sm:top-5 hidden sm:flex items-center gap-2">
           {isAdmin && (
             <>
               <button onClick={onEdit} className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-[12px] text-black font-semibold shadow-lg" style={{ background: "linear-gradient(135deg, #FBBF24, #F59E0B)" }}>
@@ -282,30 +282,40 @@ function OrgCard({
             </>
           )}
         </div>
-        <div className="absolute inset-x-0 bottom-0 p-6 md:p-8">
-          <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+        <div className="absolute inset-x-0 bottom-0 p-4 sm:p-6 md:p-8">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <h2 className="text-[24px] md:text-[30px] text-white mb-1" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 600 }}>
+              <h2 className="text-[22px] sm:text-[24px] md:text-[30px] text-white mb-1" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 600 }}>
                 {org.name}
               </h2>
               <div className="flex flex-wrap items-center gap-3">
                 <span className="inline-flex items-center gap-1 text-amber-400/85 text-[13px]"><Users size={13} /> {org.role}</span>
-                <span className="text-white/20">/</span>
+                <span className="hidden sm:block text-white/20">/</span>
                 <span className="inline-flex items-center gap-1 text-white/45 text-[13px]"><Calendar size={13} /> {org.period}</span>
               </div>
             </div>
-            <button onClick={() => setExpanded((value) => !value)} className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-[12px] text-white/65 border border-white/12 hover:border-amber-400/25 hover:text-white transition-colors" style={{ background: "rgba(6,23,40,0.55)" }}>
+            <button onClick={() => setExpanded((value) => !value)} className="inline-flex w-full sm:w-auto justify-center items-center gap-2 px-4 py-2 rounded-full text-[12px] text-white/65 border border-white/12 hover:border-amber-400/25 hover:text-white transition-colors" style={{ background: "rgba(6,23,40,0.55)" }}>
               {expanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />} {expanded ? "Sembunyikan Detail" : "Lihat Detail"}
             </button>
           </div>
+          {isAdmin && (
+            <div className="mt-3 flex flex-col gap-2 sm:hidden">
+              <button onClick={onEdit} className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full text-[12px] text-black font-semibold shadow-lg" style={{ background: "linear-gradient(135deg, #FBBF24, #F59E0B)" }}>
+                <ImagePlus size={14} /> Edit Organisasi
+              </button>
+              <button onClick={onDelete} className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full text-[12px] text-white font-semibold bg-red-500/90 hover:bg-red-500 transition-colors">
+                <Trash2 size={14} /> Hapus Organisasi
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
-      <div className="p-6 md:p-8">
+      <div className="p-4 sm:p-6 md:p-8">
         <p className="text-white/46 text-[14px] leading-relaxed max-w-3xl">{org.desc}</p>
 
         {org.stats.length > 0 && (
-          <div className="grid grid-cols-3 gap-4 mt-6 max-w-md">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 mt-6 max-w-md">
             {org.stats.map((item, index) => (
               <div key={`${item.label}-${index}`} className="text-center rounded-2xl py-4 border border-white/6" style={{ background: "rgba(255,255,255,0.04)" }}>
                 <p className="text-amber-400 text-[20px]" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 700 }}>{item.num}</p>
@@ -319,7 +329,7 @@ function OrgCard({
       <AnimatePresence>
         {expanded && (org.timeline.length > 0 || org.activities.length > 0) && (
           <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.3 }} className="overflow-hidden border-t border-white/6">
-            <div className="grid lg:grid-cols-2 gap-8 p-6 md:p-8">
+            <div className="grid lg:grid-cols-2 gap-6 sm:gap-8 p-4 sm:p-6 md:p-8">
               {org.timeline.length > 0 && (
                 <div>
                   <h3 className="text-[18px] mb-5 text-white/84" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 600 }}>
@@ -395,8 +405,8 @@ export function Organization() {
   const [modal, setModal] = useState<null | "add" | OrgEntry>(null);
 
   return (
-    <div className="min-h-screen py-24">
-      <div className="max-w-7xl mx-auto px-6">
+    <div className="min-h-screen py-20 sm:py-24">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
         {modal && (
           <OrgModal
             initial={modal === "add" ? EMPTY_ORG : modal}
@@ -410,7 +420,7 @@ export function Organization() {
         )}
 
         {isAdmin && (
-          <div className="rounded-2xl border border-amber-400/20 px-5 py-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between mb-8" style={{ background: "linear-gradient(135deg, rgba(251,191,36,0.10), rgba(6,23,40,0.85))" }}>
+          <div className="rounded-2xl border border-amber-400/20 px-4 sm:px-5 py-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between mb-8" style={{ background: "linear-gradient(135deg, rgba(251,191,36,0.10), rgba(6,23,40,0.85))" }}>
             <div className="flex items-start gap-3">
               <div className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style={{ background: "rgba(251,191,36,0.14)", border: "1px solid rgba(251,191,36,0.22)" }}>
                 <Sparkles size={18} className="text-amber-400" />
@@ -422,18 +432,18 @@ export function Organization() {
                 </p>
               </div>
             </div>
-            <button onClick={() => setModal("add")} className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-[13px] text-black font-semibold transition-all hover:scale-[1.02] shrink-0" style={{ background: "linear-gradient(135deg, #FBBF24, #F59E0B)" }}>
+            <button onClick={() => setModal("add")} className="inline-flex w-full md:w-auto items-center justify-center gap-2 px-5 py-3 rounded-xl text-[13px] text-black font-semibold transition-all hover:scale-[1.02] shrink-0" style={{ background: "linear-gradient(135deg, #FBBF24, #F59E0B)" }}>
               <Plus size={15} /> Tambah Organisasi
             </button>
           </div>
         )}
 
-        <div className="flex items-start justify-between gap-4 mb-4">
+        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
           <div>
             <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-amber-400 text-[13px] tracking-[3px] uppercase mb-2">
               Organization
             </motion.p>
-            <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-[36px] md:text-[44px] tracking-tight" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 600 }}>
+            <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-[32px] sm:text-[36px] md:text-[44px] tracking-tight" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 600 }}>
               Pengalaman Organisasi
             </motion.h1>
           </div>
@@ -445,7 +455,7 @@ export function Organization() {
           )}
         </div>
 
-        <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-white/40 text-[15px] max-w-2xl mb-14">
+        <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-white/40 text-[15px] max-w-2xl mb-10 sm:mb-14">
           Daftar organisasi yang pernah dan sedang saya ikuti selama masa studi, beserta peran, perjalanan, kegiatan, dan dokumentasi visual yang mendukung rekam jejak tersebut.
         </motion.p>
 

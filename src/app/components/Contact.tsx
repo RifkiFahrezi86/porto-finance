@@ -42,11 +42,11 @@ function EditContactModal({
 
   return (
     <AnimatePresence>
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto py-10 px-4" style={{ background: "rgba(0,0,0,0.75)", backdropFilter: "blur(8px)" }} onClick={(event) => event.target === event.currentTarget && onClose()}>
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto py-6 sm:py-10 px-3 sm:px-4" style={{ background: "rgba(0,0,0,0.75)", backdropFilter: "blur(8px)" }} onClick={(event) => event.target === event.currentTarget && onClose()}>
         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-xl rounded-3xl border border-white/10 overflow-hidden" style={{ background: "#071829" }}>
-          <div className="flex items-center justify-between p-6 border-b border-white/8">
+          <div className="flex items-start justify-between gap-4 p-4 sm:p-6 border-b border-white/8">
             <div>
-              <h2 className="text-[20px]" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 600 }}>
+              <h2 className="text-[18px] sm:text-[20px]" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 600 }}>
                 Edit Kontak dan Sosial
               </h2>
               <p className="text-white/35 text-[12px] mt-1">
@@ -58,7 +58,7 @@ function EditContactModal({
             </button>
           </div>
 
-          <div className="p-6 grid sm:grid-cols-2 gap-4">
+          <div className="p-4 sm:p-6 grid sm:grid-cols-2 gap-4">
             <div>
               {label("Email")}
               <input className={inputCls} style={inputStyle} value={form.email} onChange={(event) => setForm({ ...form, email: event.target.value })} placeholder="email@kampus.ac.id" />
@@ -85,11 +85,11 @@ function EditContactModal({
             </div>
           </div>
 
-          <div className="flex justify-end gap-3 p-6 border-t border-white/8">
-            <button onClick={onClose} className="px-5 py-2 rounded-lg text-[13px] text-white/60 border border-white/10 hover:border-white/20 hover:text-white transition-colors">
+          <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-3 p-4 sm:p-6 border-t border-white/8">
+            <button onClick={onClose} className="w-full sm:w-auto px-5 py-2 rounded-lg text-[13px] text-white/60 border border-white/10 hover:border-white/20 hover:text-white transition-colors">
               Batal
             </button>
-            <button onClick={onSave} className="inline-flex items-center gap-2 px-6 py-2 rounded-lg text-[13px] text-black font-semibold transition-all hover:scale-105" style={{ background: "linear-gradient(135deg, #FBBF24, #F59E0B)" }}>
+            <button onClick={onSave} className="inline-flex w-full sm:w-auto justify-center items-center gap-2 px-6 py-2 rounded-lg text-[13px] text-black font-semibold transition-all hover:scale-105" style={{ background: "linear-gradient(135deg, #FBBF24, #F59E0B)" }}>
               <Save size={14} /> Simpan
             </button>
           </div>
@@ -150,8 +150,8 @@ export function Contact() {
   ];
 
   return (
-    <div className="min-h-screen py-24">
-      <div className="max-w-7xl mx-auto px-6">
+    <div className="min-h-screen py-20 sm:py-24">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
         {editOpen && (
           <EditContactModal
             form={contactDraft}
@@ -165,7 +165,7 @@ export function Contact() {
         )}
 
         {isAdmin && (
-          <div className="rounded-2xl border border-amber-400/20 px-5 py-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between mb-8" style={{ background: "linear-gradient(135deg, rgba(251,191,36,0.10), rgba(6,23,40,0.85))" }}>
+          <div className="rounded-2xl border border-amber-400/20 px-4 sm:px-5 py-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between mb-8" style={{ background: "linear-gradient(135deg, rgba(251,191,36,0.10), rgba(6,23,40,0.85))" }}>
             <div className="flex items-start gap-3">
               <div className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style={{ background: "rgba(251,191,36,0.14)", border: "1px solid rgba(251,191,36,0.22)" }}>
                 <Sparkles size={18} className="text-amber-400" />
@@ -177,7 +177,7 @@ export function Contact() {
                 </p>
               </div>
             </div>
-            <button onClick={openEdit} className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-[13px] text-black font-semibold transition-all hover:scale-[1.02] shrink-0" style={{ background: "linear-gradient(135deg, #FBBF24, #F59E0B)" }}>
+            <button onClick={openEdit} className="inline-flex w-full md:w-auto items-center justify-center gap-2 px-5 py-3 rounded-xl text-[13px] text-black font-semibold transition-all hover:scale-[1.02] shrink-0" style={{ background: "linear-gradient(135deg, #FBBF24, #F59E0B)" }}>
               <Edit3 size={15} /> Edit Kontak dan Sosial
             </button>
           </div>
@@ -186,16 +186,16 @@ export function Contact() {
         <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-amber-400 text-[13px] tracking-[3px] uppercase mb-3">
           Get In Touch
         </motion.p>
-        <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-[36px] md:text-[44px] tracking-tight mb-4" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 600 }}>
+        <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-[32px] sm:text-[36px] md:text-[44px] tracking-tight mb-4" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 600 }}>
           Hubungi Saya
         </motion.h1>
-        <p className="text-white/40 text-[15px] max-w-2xl mb-12">
+        <p className="text-white/40 text-[15px] max-w-2xl mb-10 sm:mb-12">
           Halaman ini dirancang untuk menampilkan kanal komunikasi yang rapi dan profesional, mulai dari email, WhatsApp, hingga LinkedIn dan Instagram yang relevan untuk kebutuhan networking atau kolaborasi.
         </p>
 
-        <div className="grid lg:grid-cols-[0.95fr_1.05fr] gap-12">
-          <motion.form initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} onSubmit={handleSubmit} className="rounded-[28px] border border-white/6 p-7 space-y-5" style={{ background: "rgba(6,23,40,0.74)", boxShadow: "0 18px 60px rgba(0,0,0,0.25)" }}>
-            <div className="flex items-center justify-between gap-4">
+        <div className="grid lg:grid-cols-[0.95fr_1.05fr] gap-8 sm:gap-10 lg:gap-12">
+          <motion.form initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} onSubmit={handleSubmit} className="rounded-[28px] border border-white/6 p-5 sm:p-7 space-y-5" style={{ background: "rgba(6,23,40,0.74)", boxShadow: "0 18px 60px rgba(0,0,0,0.25)" }}>
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div>
                 <p className="text-amber-400 text-[12px] tracking-[2px] uppercase mb-1">Direct Message</p>
                 <p className="text-white/40 text-[13px]">Kirim pesan cepat melalui form ini.</p>
@@ -216,21 +216,21 @@ export function Contact() {
               <label className="text-[13px] text-white/50 mb-2 block">Pesan</label>
               <textarea value={form.message} onChange={(event) => setForm({ ...form, message: event.target.value })} rows={6} className="w-full rounded-xl px-4 py-3 text-[14px] text-white placeholder-white/20 focus:outline-none transition-colors resize-none" style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)" }} placeholder="Tulis pesan Anda..." required />
             </div>
-            <button type="submit" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-[14px] text-black font-medium transition-all hover:scale-[1.02]" style={{ background: "linear-gradient(135deg, #FBBF24, #F59E0B)" }}>
+            <button type="submit" className="inline-flex w-full sm:w-auto justify-center items-center gap-2 px-6 py-3 rounded-xl text-[14px] text-black font-medium transition-all hover:scale-[1.02]" style={{ background: "linear-gradient(135deg, #FBBF24, #F59E0B)" }}>
               {sent ? "Terkirim" : "Kirim Pesan"} <Send size={16} />
             </button>
           </motion.form>
 
           <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} className="space-y-5">
-            <div className="rounded-[28px] p-7 border border-amber-400/15" style={{ background: "linear-gradient(135deg, rgba(251,191,36,0.08), rgba(6,23,40,0.82))", boxShadow: "0 18px 60px rgba(0,0,0,0.22)" }}>
-              <div className="flex items-start justify-between gap-4">
+            <div className="rounded-[28px] p-5 sm:p-7 border border-amber-400/15" style={{ background: "linear-gradient(135deg, rgba(251,191,36,0.08), rgba(6,23,40,0.82))", boxShadow: "0 18px 60px rgba(0,0,0,0.22)" }}>
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
                 <div>
                   <p className="text-[22px] mb-1" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 600 }}>{personalInfo.name}</p>
                   <p className="text-amber-400/85 text-[13px] mb-1">{personalInfo.major}</p>
                   <p className="text-white/40 text-[13px]">{personalInfo.university} / {personalInfo.year}</p>
                 </div>
                 {isAdmin && (
-                  <button onClick={openEdit} className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-[12px] text-black font-semibold" style={{ background: "linear-gradient(135deg, #FBBF24, #F59E0B)" }}>
+                  <button onClick={openEdit} className="inline-flex w-full sm:w-auto justify-center items-center gap-2 px-4 py-2 rounded-full text-[12px] text-black font-semibold" style={{ background: "linear-gradient(135deg, #FBBF24, #F59E0B)" }}>
                     <Edit3 size={13} /> Edit
                   </button>
                 )}
@@ -239,22 +239,22 @@ export function Contact() {
 
             <div className="grid gap-4">
               {contactItems.map((item) => (
-                <div key={item.label} className="flex items-center gap-4 rounded-2xl p-5 border border-white/6 hover:border-amber-400/20 transition-all" style={{ background: "rgba(6,23,40,0.80)" }}>
+                <div key={item.label} className="flex items-start sm:items-center gap-4 rounded-2xl p-4 sm:p-5 border border-white/6 hover:border-amber-400/20 transition-all" style={{ background: "rgba(6,23,40,0.80)" }}>
                   <div className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0" style={{ background: "rgba(251,191,36,0.1)", border: "1px solid rgba(251,191,36,0.18)" }}>
                     <item.icon size={18} className="text-amber-400" />
                   </div>
                   <div className="min-w-0 flex-1">
                     <p className="text-white/35 text-[12px] mb-1">{item.label}</p>
                     {item.href ? (
-                      <a href={item.href} target="_blank" rel="noopener noreferrer" className="text-[14px] text-white hover:text-amber-400 transition-colors truncate block">
+                      <a href={item.href} target="_blank" rel="noopener noreferrer" className="text-[14px] text-white hover:text-amber-400 transition-colors break-all block">
                         {item.value}
                       </a>
                     ) : (
-                      <p className="text-[14px] text-white truncate">{item.value}</p>
+                      <p className="text-[14px] text-white break-words">{item.value}</p>
                     )}
                   </div>
                   {isAdmin && item.label !== "Lokasi" && (
-                    <button onClick={openEdit} className="text-amber-400/65 hover:text-amber-400 transition-colors shrink-0">
+                    <button onClick={openEdit} className="text-amber-400/65 hover:text-amber-400 transition-colors shrink-0 self-start sm:self-auto">
                       <Edit3 size={15} />
                     </button>
                   )}
@@ -267,7 +267,7 @@ export function Contact() {
                 <p className="text-amber-400 text-[12px] tracking-[2px] uppercase mb-3">Social Presence</p>
                 <div className="grid sm:grid-cols-2 gap-3">
                   {socials.map((item) => (
-                    <a key={item.label} href={item.href} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 rounded-2xl px-4 py-4 text-[13px] text-white/58 border border-white/6 hover:border-amber-400/20 hover:text-amber-400 transition-colors" style={{ background: "rgba(6,23,40,0.80)" }}>
+                    <a key={item.label} href={item.href} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 rounded-2xl px-4 py-4 text-[13px] text-white/58 border border-white/6 hover:border-amber-400/20 hover:text-amber-400 transition-colors min-w-0" style={{ background: "rgba(6,23,40,0.80)" }}>
                       <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ background: "rgba(251,191,36,0.1)", border: "1px solid rgba(251,191,36,0.18)" }}>
                         <item.icon size={16} className="text-amber-400" />
                       </div>

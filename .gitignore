@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.vercel/
+coverage/
+*.log
+*.tsbuildinfo
+.DS_Store
+.env
+.env.*
+!.env.example
+Portfolio website design.zip

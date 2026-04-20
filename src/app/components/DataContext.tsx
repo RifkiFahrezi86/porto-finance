@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from "react";
 
 export interface PersonalInfo {
   name: string;
@@ -287,6 +287,166 @@ const DEFAULT_CERTIFICATES: Certificate[] = [
   },
 ];
 
+type PortfolioSnapshot = {
+  personalInfo: PersonalInfo;
+  orgs: OrgEntry[];
+  projects: Project[];
+  certificates: Certificate[];
+};
+
+function mergePersonalInfo(remote?: Partial<PersonalInfo>): PersonalInfo {
+  return {
+    ...DEFAULT_PERSONAL_INFO,
+    ...remote,
+    skills: Array.isArray(remote?.skills) ? remote.skills : DEFAULT_PERSONAL_INFO.skills,
+    stats: Array.isArray(remote?.stats) ? remote.stats : DEFAULT_PERSONAL_INFO.stats,
+    education: Array.isArray(remote?.education) ? remote.education : DEFAULT_PERSONAL_INFO.education,
+  };
+}
+
+function mergePortfolioSnapshot(remote?: Partial<PortfolioSnapshot> | null): PortfolioSnapshot {
+  return {
+    personalInfo: mergePersonalInfo(remote?.personalInfo),
+    orgs: Array.isArray(remote?.orgs) ? remote.orgs.map(normalizeOrg) : DEFAULT_ORGS.map(normalizeOrg),
+    projects: Array.isArray(remote?.projects) ? remote.projects.map(normalizeProject) : DEFAULT_PROJECTS.map(normalizeProject),
+    certificates: Array.isArray(remote?.certificates)
+      ? remote.certificates.map(normalizeCertificate)
+      : DEFAULT_CERTIFICATES.map(normalizeCertificate),
+  };
+}
+
+function createPortfolioSnapshot(
+  personalInfo: PersonalInfo,
+  orgs: OrgEntry[],
+  projects: Project[],
+  certificates: Certificate[],
+): PortfolioSnapshot {
+  return { personalInfo, orgs, projects, certificates };
+}
+
+function clonePortfolioSnapshot(snapshot: PortfolioSnapshot): PortfolioSnapshot {
+  return {
+    personalInfo: {
+      ...snapshot.personalInfo,
+      skills: snapshot.personalInfo.skills.map((skill) => ({ ...skill })),
+      stats: snapshot.personalInfo.stats.map((stat) => ({ ...stat })),
+      education: snapshot.personalInfo.education.map((education) => ({ ...education })),
+    },
+    orgs: snapshot.orgs.map((org) => ({
+      ...org,
+      stats: org.stats.map((stat) => ({ ...stat })),
+      timeline: org.timeline.map((item) => ({ ...item })),
+      activities: org.activities.map((activity) => ({ ...activity })),
+    })),
+    projects: snapshot.projects.map((project) => ({
+      ...project,
+      tags: [...project.tags],
+      images: [...project.images],
+    })),
+    certificates: snapshot.certificates.map((certificate) => ({ ...certificate })),
+  };
+}
+
+function isImageDataUrl(value?: string) {
+  return typeof value === "string" && value.startsWith("data:image/");
+}
+
+function sanitizeUploadName(value: string) {
+  const cleaned = value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+  return cleaned || "image";
+}
+
+async function fetchRemotePortfolio(): Promise<PortfolioSnapshot | null> {
+  try {
+    const response = await fetch("/api/portfolio", { cache: "no-store" });
+    if (!response.ok) return null;
+    const payload = await response.json();
+    return mergePortfolioSnapshot(payload.data ?? payload);
+  } catch {
+    return null;
+  }
+}
+
+async function saveRemotePortfolio(snapshot: PortfolioSnapshot) {
+  const response = await fetch("/api/portfolio", {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(snapshot),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to save portfolio snapshot");
+  }
+}
+
+async function uploadImageDataUrl(dataUrl: string, folder: string, filename: string) {
+  const response = await fetch("/api/upload", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      dataUrl,
+      folder,
+      filename,
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to upload image");
+  }
+
+  const payload = await response.json();
+  return payload.url as string;
+}
+
+async function resolvePortfolioUploads(snapshot: PortfolioSnapshot): Promise<PortfolioSnapshot> {
+  const nextSnapshot = clonePortfolioSnapshot(snapshot);
+  let changed = false;
+
+  if (isImageDataUrl(nextSnapshot.personalInfo.photo)) {
+    nextSnapshot.personalInfo.photo = await uploadImageDataUrl(
+      nextSnapshot.personalInfo.photo,
+      "profiles",
+      sanitizeUploadName(nextSnapshot.personalInfo.name || "profile-photo"),
+    );
+    changed = true;
+  }
+
+  for (const org of nextSnapshot.orgs) {
+    if (isImageDataUrl(org.image)) {
+      org.image = await uploadImageDataUrl(
+        org.image,
+        "organizations",
+        sanitizeUploadName(org.name || `organization-${org.id}`),
+      );
+      changed = true;
+    }
+  }
+
+  for (const project of nextSnapshot.projects) {
+    for (let index = 0; index < project.images.length; index += 1) {
+      if (!isImageDataUrl(project.images[index])) continue;
+      project.images[index] = await uploadImageDataUrl(
+        project.images[index],
+        "projects",
+        sanitizeUploadName(`${project.title || "project"}-${index + 1}`),
+      );
+      changed = true;
+    }
+  }
+
+  for (const certificate of nextSnapshot.certificates) {
+    if (!isImageDataUrl(certificate.image)) continue;
+    certificate.image = await uploadImageDataUrl(
+      certificate.image,
+      "certificates",
+      sanitizeUploadName(certificate.title || `certificate-${certificate.id}`),
+    );
+    changed = true;
+  }
+
+  return changed ? nextSnapshot : snapshot;
+}
+
 interface DataContextType {
   personalInfo: PersonalInfo;
   updatePersonalInfo: (info: PersonalInfo) => void;
@@ -352,6 +512,34 @@ export function DataProvider({ children }: { children: ReactNode }) {
       return false;
     }
   });
+  const [storageMode, setStorageMode] = useState<"local" | "remote">("local");
+  const [remoteHydrated, setRemoteHydrated] = useState(false);
+  const lastRemoteSignatureRef = useRef("");
+  const syncJobRef = useRef(0);
+
+  useEffect(() => {
+    let isActive = true;
+
+    (async () => {
+      const remoteSnapshot = await fetchRemotePortfolio();
+      if (!isActive) return;
+
+      if (remoteSnapshot) {
+        setPersonalInfo(remoteSnapshot.personalInfo);
+        setOrgs(remoteSnapshot.orgs);
+        setProjects(remoteSnapshot.projects);
+        setCertificates(remoteSnapshot.certificates);
+        lastRemoteSignatureRef.current = JSON.stringify(remoteSnapshot);
+        setStorageMode("remote");
+      }
+
+      setRemoteHydrated(true);
+    })();
+
+    return () => {
+      isActive = false;
+    };
+  }, []);
 
   useEffect(() => {
     localStorage.setItem("pf_personal", JSON.stringify(personalInfo));
@@ -372,6 +560,44 @@ export function DataProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     localStorage.setItem("pf_admin_mode", String(isAdmin));
   }, [isAdmin]);
+
+  const portfolioSignature = JSON.stringify(createPortfolioSnapshot(personalInfo, orgs, projects, certificates));
+
+  useEffect(() => {
+    if (!remoteHydrated || storageMode !== "remote" || portfolioSignature === lastRemoteSignatureRef.current) {
+      return;
+    }
+
+    const syncJob = ++syncJobRef.current;
+    const snapshot = createPortfolioSnapshot(personalInfo, orgs, projects, certificates);
+    const timeoutId = window.setTimeout(() => {
+      (async () => {
+        try {
+          const preparedSnapshot = await resolvePortfolioUploads(snapshot);
+          if (syncJob !== syncJobRef.current) return;
+
+          await saveRemotePortfolio(preparedSnapshot);
+          if (syncJob !== syncJobRef.current) return;
+
+          const preparedSignature = JSON.stringify(preparedSnapshot);
+          lastRemoteSignatureRef.current = preparedSignature;
+
+          if (preparedSignature !== portfolioSignature) {
+            setPersonalInfo(preparedSnapshot.personalInfo);
+            setOrgs(preparedSnapshot.orgs);
+            setProjects(preparedSnapshot.projects);
+            setCertificates(preparedSnapshot.certificates);
+          }
+        } catch (error) {
+          console.error("Remote portfolio sync failed", error);
+        }
+      })();
+    }, 250);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [personalInfo, orgs, projects, certificates, portfolioSignature, remoteHydrated, storageMode]);
 
   const updatePersonalInfo = (info: PersonalInfo) => setPersonalInfo(info);
 

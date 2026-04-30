@@ -22,14 +22,30 @@ function sanitizeSegment(value) {
 }
 
 function parseDataUrl(dataUrl) {
-  const match = /^data:(image\/[a-zA-Z0-9.+-]+);base64,(.+)$/s.exec(dataUrl || "");
-  if (!match) {
+  if (typeof dataUrl !== "string" || !dataUrl.startsWith("data:")) {
     throw new Error("Invalid image data URL");
   }
 
+  const separatorIndex = dataUrl.indexOf(",");
+  if (separatorIndex < 0) {
+    throw new Error("Invalid image data URL");
+  }
+
+  const metadata = dataUrl.slice(5, separatorIndex).split(";").filter(Boolean);
+  const mimeType = metadata[0] || "";
+  const payload = dataUrl.slice(separatorIndex + 1);
+
+  if (!mimeType.startsWith("image/")) {
+    throw new Error("Invalid image data URL");
+  }
+
+  const isBase64 = metadata.includes("base64");
+
   return {
-    mimeType: match[1],
-    buffer: Buffer.from(match[2], "base64"),
+    mimeType,
+    buffer: isBase64
+      ? Buffer.from(payload, "base64")
+      : Buffer.from(decodeURIComponent(payload), "utf8"),
   };
 }
 

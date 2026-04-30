@@ -14,6 +14,7 @@ export interface PersonalInfo {
   github: string;
   location: string;
   photo: string;
+  homeContent: HomeContent;
   skills: { label: string; desc: string }[];
   stats: { num: string; label: string }[];
   education: { school: string; degree: string; period: string; desc: string }[];
@@ -48,6 +49,38 @@ export interface Certificate {
   date: string;
   desc: string;
   image: string;
+}
+
+export interface HomeContentCard {
+  title: string;
+  desc: string;
+}
+
+export interface HomeContent {
+  heroBadgeTitle: string;
+  heroBadgeSubtitle: string;
+  heroDetails: {
+    major: string;
+    university: string;
+    year: string;
+  };
+  heroButtons: {
+    projects: string;
+    certificates: string;
+  };
+  academicEyebrow: string;
+  academicTitle: string;
+  academicCards: HomeContentCard[];
+  focusEyebrow: string;
+  focusTitle: string;
+  portfolioEyebrow: string;
+  portfolioTitle: string;
+  portfolioDescription: string;
+  portfolioButtons: {
+    organization: string;
+    contact: string;
+  };
+  portfolioCards: HomeContentCard[];
 }
 
 function createPlaceholderImage(eyebrow: string, title: string) {
@@ -91,6 +124,8 @@ function createPlaceholderImage(eyebrow: string, title: string) {
   return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
 }
 
+const GENERATED_PLACEHOLDER_PREFIX = "data:image/svg+xml;charset=UTF-8,";
+
 function projectPlaceholder(project: Pick<Project, "title" | "category">) {
   return createPlaceholderImage(project.category, project.title);
 }
@@ -103,6 +138,10 @@ function orgPlaceholder(org: Pick<OrgEntry, "name" | "acronym">) {
   return createPlaceholderImage(org.acronym || "Organization", org.name);
 }
 
+function isGeneratedPlaceholderImage(value?: string) {
+  return typeof value === "string" && value.startsWith(GENERATED_PLACEHOLDER_PREFIX);
+}
+
 function isLegacyRemoteImage(value?: string) {
   return !value || value.includes("images.unsplash.com");
 }
@@ -111,21 +150,128 @@ function normalizeProject(project: Project): Project {
   const firstImage = project.images?.[0];
   return {
     ...project,
-    images: [isLegacyRemoteImage(firstImage) ? projectPlaceholder(project) : firstImage],
+    images: [
+      isLegacyRemoteImage(firstImage) || isGeneratedPlaceholderImage(firstImage)
+        ? projectPlaceholder(project)
+        : firstImage,
+    ],
   };
 }
 
 function normalizeCertificate(certificate: Certificate): Certificate {
   return {
     ...certificate,
-    image: isLegacyRemoteImage(certificate.image) ? certificatePlaceholder(certificate) : certificate.image,
+    image:
+      isLegacyRemoteImage(certificate.image) || isGeneratedPlaceholderImage(certificate.image)
+        ? certificatePlaceholder(certificate)
+        : certificate.image,
   };
 }
 
 function normalizeOrg(org: OrgEntry): OrgEntry {
   return {
     ...org,
-    image: isLegacyRemoteImage(org.image) ? orgPlaceholder(org) : org.image,
+    image:
+      isLegacyRemoteImage(org.image) || isGeneratedPlaceholderImage(org.image)
+        ? orgPlaceholder(org)
+        : org.image,
+  };
+}
+
+const DEFAULT_HOME_CONTENT: HomeContent = {
+  heroBadgeTitle: "Capital Market Track",
+  heroBadgeSubtitle: "Finance oriented portfolio",
+  heroDetails: {
+    major: "Jurusan",
+    university: "Universitas",
+    year: "Angkatan",
+  },
+  heroButtons: {
+    projects: "Lihat Proyek",
+    certificates: "Lihat Sertifikat",
+  },
+  academicEyebrow: "Academic Profile",
+  academicTitle: "Fondasi Akademik dan Arah Pengembangan",
+  academicCards: [
+    {
+      title: "Jurusan",
+      desc: "Bidang studi utama yang membentuk fokus analisis dan kerangka berpikir bisnis.",
+    },
+    {
+      title: "Universitas",
+      desc: "Lingkungan akademik tempat perjalanan belajar, riset, dan organisasi berkembang.",
+    },
+    {
+      title: "Tahun Studi",
+      desc: "Rentang perjalanan yang menjadi konteks untuk proyek, sertifikat, dan pengalaman organisasi.",
+    },
+  ],
+  focusEyebrow: "Focus Areas",
+  focusTitle: "Bidang Yang Sedang Saya Kembangkan",
+  portfolioEyebrow: "Portfolio Direction",
+  portfolioTitle: "Jelajahi Jejak Belajar Yang Terdokumentasi",
+  portfolioDescription:
+    "Dari proyek analisis keuangan, sertifikat pelatihan, hingga pengalaman organisasi, seluruh bagian portfolio ini dirancang untuk menunjukkan proses belajar yang terarah dan relevan dengan bidang finance.",
+  portfolioButtons: {
+    organization: "Lihat Organisasi",
+    contact: "Hubungi Saya",
+  },
+  portfolioCards: [
+    {
+      title: "Proyek Analisis",
+      desc: "Studi kasus yang menekankan rasio keuangan, valuasi, dan logika keputusan bisnis.",
+    },
+    {
+      title: "Catatan Sertifikasi",
+      desc: "Rekam pembelajaran formal maupun pelatihan tambahan yang mendukung arah profesi.",
+    },
+    {
+      title: "Eksposur Organisasi",
+      desc: "Pengalaman lapangan yang melatih koordinasi, kepemimpinan, dan literasi pasar modal.",
+    },
+  ],
+};
+
+function cloneHomeContent(homeContent: HomeContent): HomeContent {
+  return {
+    ...homeContent,
+    heroDetails: { ...homeContent.heroDetails },
+    heroButtons: { ...homeContent.heroButtons },
+    academicCards: homeContent.academicCards.map((card) => ({ ...card })),
+    portfolioButtons: { ...homeContent.portfolioButtons },
+    portfolioCards: homeContent.portfolioCards.map((card) => ({ ...card })),
+  };
+}
+
+function mergeHomeCards(defaultCards: HomeContentCard[], remoteCards?: HomeContentCard[]) {
+  if (!Array.isArray(remoteCards) || remoteCards.length === 0) {
+    return defaultCards.map((card) => ({ ...card }));
+  }
+
+  return remoteCards.map((card, index) => ({
+    ...(defaultCards[index] ?? { title: "", desc: "" }),
+    ...card,
+  }));
+}
+
+function mergeHomeContent(remote?: Partial<HomeContent>): HomeContent {
+  return {
+    ...DEFAULT_HOME_CONTENT,
+    ...remote,
+    heroDetails: {
+      ...DEFAULT_HOME_CONTENT.heroDetails,
+      ...remote?.heroDetails,
+    },
+    heroButtons: {
+      ...DEFAULT_HOME_CONTENT.heroButtons,
+      ...remote?.heroButtons,
+    },
+    academicCards: mergeHomeCards(DEFAULT_HOME_CONTENT.academicCards, remote?.academicCards),
+    portfolioButtons: {
+      ...DEFAULT_HOME_CONTENT.portfolioButtons,
+      ...remote?.portfolioButtons,
+    },
+    portfolioCards: mergeHomeCards(DEFAULT_HOME_CONTENT.portfolioCards, remote?.portfolioCards),
   };
 }
 
@@ -143,6 +289,7 @@ const DEFAULT_PERSONAL_INFO: PersonalInfo = {
   github: "",
   location: "Indonesia",
   photo: "",
+  homeContent: cloneHomeContent(DEFAULT_HOME_CONTENT),
   skills: [
     { label: "Financial Analysis", desc: "Analisis laporan keuangan, valuasi, dan pembacaan data bisnis" },
     { label: "Capital Market", desc: "Minat mendalam pada literasi investasi dan dinamika pasar modal" },
@@ -298,6 +445,7 @@ function mergePersonalInfo(remote?: Partial<PersonalInfo>): PersonalInfo {
   return {
     ...DEFAULT_PERSONAL_INFO,
     ...remote,
+    homeContent: mergeHomeContent(remote?.homeContent),
     skills: Array.isArray(remote?.skills) ? remote.skills : DEFAULT_PERSONAL_INFO.skills,
     stats: Array.isArray(remote?.stats) ? remote.stats : DEFAULT_PERSONAL_INFO.stats,
     education: Array.isArray(remote?.education) ? remote.education : DEFAULT_PERSONAL_INFO.education,
@@ -328,6 +476,7 @@ function clonePortfolioSnapshot(snapshot: PortfolioSnapshot): PortfolioSnapshot 
   return {
     personalInfo: {
       ...snapshot.personalInfo,
+      homeContent: cloneHomeContent(snapshot.personalInfo.homeContent),
       skills: snapshot.personalInfo.skills.map((skill) => ({ ...skill })),
       stats: snapshot.personalInfo.stats.map((stat) => ({ ...stat })),
       education: snapshot.personalInfo.education.map((education) => ({ ...education })),
@@ -345,6 +494,39 @@ function clonePortfolioSnapshot(snapshot: PortfolioSnapshot): PortfolioSnapshot 
     })),
     certificates: snapshot.certificates.map((certificate) => ({ ...certificate })),
   };
+}
+
+function sanitizeSnapshotForRemote(snapshot: PortfolioSnapshot): PortfolioSnapshot {
+  const nextSnapshot = clonePortfolioSnapshot(snapshot);
+  let changed = false;
+
+  if (isGeneratedPlaceholderImage(nextSnapshot.personalInfo.photo)) {
+    nextSnapshot.personalInfo.photo = "";
+    changed = true;
+  }
+
+  for (const org of nextSnapshot.orgs) {
+    if (!isGeneratedPlaceholderImage(org.image)) continue;
+    org.image = "";
+    changed = true;
+  }
+
+  for (const project of nextSnapshot.projects) {
+    const nextImages = project.images.map((image) => {
+      if (!isGeneratedPlaceholderImage(image)) return image;
+      changed = true;
+      return "";
+    });
+    project.images = nextImages;
+  }
+
+  for (const certificate of nextSnapshot.certificates) {
+    if (!isGeneratedPlaceholderImage(certificate.image)) continue;
+    certificate.image = "";
+    changed = true;
+  }
+
+  return changed ? nextSnapshot : snapshot;
 }
 
 function isImageDataUrl(value?: string) {
@@ -381,10 +563,11 @@ async function fetchRemotePortfolio(): Promise<{ available: boolean; snapshot: P
 }
 
 async function saveRemotePortfolio(snapshot: PortfolioSnapshot) {
+  const remoteSnapshot = sanitizeSnapshotForRemote(snapshot);
   const response = await fetch("/api/portfolio", {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(snapshot),
+    body: JSON.stringify(remoteSnapshot),
   });
 
   if (!response.ok) {
@@ -415,7 +598,10 @@ async function resolvePortfolioUploads(snapshot: PortfolioSnapshot): Promise<Por
   const nextSnapshot = clonePortfolioSnapshot(snapshot);
   let changed = false;
 
-  if (isImageDataUrl(nextSnapshot.personalInfo.photo)) {
+  if (
+    isImageDataUrl(nextSnapshot.personalInfo.photo) &&
+    !isGeneratedPlaceholderImage(nextSnapshot.personalInfo.photo)
+  ) {
     nextSnapshot.personalInfo.photo = await uploadImageDataUrl(
       nextSnapshot.personalInfo.photo,
       "profiles",
@@ -425,7 +611,7 @@ async function resolvePortfolioUploads(snapshot: PortfolioSnapshot): Promise<Por
   }
 
   for (const org of nextSnapshot.orgs) {
-    if (isImageDataUrl(org.image)) {
+    if (isImageDataUrl(org.image) && !isGeneratedPlaceholderImage(org.image)) {
       org.image = await uploadImageDataUrl(
         org.image,
         "organizations",
@@ -437,7 +623,12 @@ async function resolvePortfolioUploads(snapshot: PortfolioSnapshot): Promise<Por
 
   for (const project of nextSnapshot.projects) {
     for (let index = 0; index < project.images.length; index += 1) {
-      if (!isImageDataUrl(project.images[index])) continue;
+      if (
+        !isImageDataUrl(project.images[index]) ||
+        isGeneratedPlaceholderImage(project.images[index])
+      ) {
+        continue;
+      }
       project.images[index] = await uploadImageDataUrl(
         project.images[index],
         "projects",
@@ -448,7 +639,7 @@ async function resolvePortfolioUploads(snapshot: PortfolioSnapshot): Promise<Por
   }
 
   for (const certificate of nextSnapshot.certificates) {
-    if (!isImageDataUrl(certificate.image)) continue;
+    if (!isImageDataUrl(certificate.image) || isGeneratedPlaceholderImage(certificate.image)) continue;
     certificate.image = await uploadImageDataUrl(
       certificate.image,
       "certificates",
@@ -485,9 +676,9 @@ export function DataProvider({ children }: { children: ReactNode }) {
   const [personalInfo, setPersonalInfo] = useState<PersonalInfo>(() => {
     try {
       const s = localStorage.getItem("pf_personal");
-      return s ? { ...DEFAULT_PERSONAL_INFO, ...JSON.parse(s) } : DEFAULT_PERSONAL_INFO;
+      return s ? mergePersonalInfo(JSON.parse(s)) : mergePersonalInfo();
     } catch {
-      return DEFAULT_PERSONAL_INFO;
+      return mergePersonalInfo();
     }
   });
 
@@ -633,19 +824,19 @@ export function DataProvider({ children }: { children: ReactNode }) {
     setOrgs((prev) => prev.filter((x) => x.id !== id));
 
   const addProject = (p: Omit<Project, "id">) =>
-    setProjects((prev) => [...prev, { ...p, id: Date.now() }]);
+    setProjects((prev) => [...prev, normalizeProject({ ...p, id: Date.now() })]);
 
   const updateProject = (p: Project) =>
-    setProjects((prev) => prev.map((x) => (x.id === p.id ? p : x)));
+    setProjects((prev) => prev.map((x) => (x.id === p.id ? normalizeProject(p) : x)));
 
   const deleteProject = (id: number) =>
     setProjects((prev) => prev.filter((x) => x.id !== id));
 
   const addCertificate = (c: Omit<Certificate, "id">) =>
-    setCertificates((prev) => [...prev, { ...c, id: Date.now() }]);
+    setCertificates((prev) => [...prev, normalizeCertificate({ ...c, id: Date.now() })]);
 
   const updateCertificate = (c: Certificate) =>
-    setCertificates((prev) => prev.map((x) => (x.id === c.id ? c : x)));
+    setCertificates((prev) => prev.map((x) => (x.id === c.id ? normalizeCertificate(c) : x)));
 
   const deleteCertificate = (id: number) =>
     setCertificates((prev) => prev.filter((x) => x.id !== id));

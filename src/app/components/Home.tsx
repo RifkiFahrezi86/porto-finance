@@ -30,6 +30,23 @@ import profileImgDefault from "../../imports/WhatsApp_Image_2026-04-18_at_17.25.
 
 const SKILL_ICONS = [LineChart, Landmark, Users, BookOpenCheck, TrendingUp, BarChart3, GraduationCap];
 
+function clonePersonalInfo(personalInfo: PersonalInfo): PersonalInfo {
+  return {
+    ...personalInfo,
+    homeContent: {
+      ...personalInfo.homeContent,
+      heroDetails: { ...personalInfo.homeContent.heroDetails },
+      heroButtons: { ...personalInfo.homeContent.heroButtons },
+      academicCards: personalInfo.homeContent.academicCards.map((card) => ({ ...card })),
+      portfolioButtons: { ...personalInfo.homeContent.portfolioButtons },
+      portfolioCards: personalInfo.homeContent.portfolioCards.map((card) => ({ ...card })),
+    },
+    skills: personalInfo.skills.map((skill) => ({ ...skill })),
+    stats: personalInfo.stats.map((stat) => ({ ...stat })),
+    education: personalInfo.education.map((education) => ({ ...education })),
+  };
+}
+
 function toExternalUrl(value: string, type: "linkedin" | "instagram" | "github") {
   if (!value.trim()) return "";
   if (value.startsWith("http://") || value.startsWith("https://")) return value;
@@ -76,6 +93,40 @@ function EditProfileModal({
     const education = [...draft.education];
     education[index] = { ...education[index], [key]: value };
     setDraft({ ...draft, education });
+  };
+
+  const updateHomeCard = (
+    key: "academicCards" | "portfolioCards",
+    index: number,
+    field: "title" | "desc",
+    value: string,
+  ) => {
+    const cards = [...draft.homeContent[key]];
+    cards[index] = { ...cards[index], [field]: value };
+    setDraft({
+      ...draft,
+      homeContent: {
+        ...draft.homeContent,
+        [key]: cards,
+      },
+    });
+  };
+
+  const updateHomeGroup = (
+    key: "heroDetails" | "heroButtons" | "portfolioButtons",
+    field: string,
+    value: string,
+  ) => {
+    setDraft({
+      ...draft,
+      homeContent: {
+        ...draft.homeContent,
+        [key]: {
+          ...draft.homeContent[key],
+          [field]: value,
+        },
+      },
+    });
   };
 
   const photoSrc = draft.photo.trim() || profileImgDefault;
@@ -310,6 +361,135 @@ function EditProfileModal({
                 </div>
               </div>
             </div>
+
+            <div className="rounded-2xl p-5" style={sectionStyle}>
+              <p className="text-amber-400 text-[11px] tracking-[3px] uppercase mb-4">Teks Halaman Home</p>
+              <div className="grid lg:grid-cols-2 gap-6">
+                <div className="space-y-5">
+                  <div className="rounded-xl p-4 border border-white/8 space-y-3" style={{ background: "rgba(255,255,255,0.02)" }}>
+                    <p className="text-white/60 text-[12px] uppercase tracking-[2px]">Badge Hero</p>
+                    <div>
+                      {label("Judul Badge")}
+                      <input className={inputCls} style={inputStyle} value={draft.homeContent.heroBadgeTitle} onChange={(event) => setDraft({ ...draft, homeContent: { ...draft.homeContent, heroBadgeTitle: event.target.value } })} />
+                    </div>
+                    <div>
+                      {label("Subjudul Badge")}
+                      <input className={inputCls} style={inputStyle} value={draft.homeContent.heroBadgeSubtitle} onChange={(event) => setDraft({ ...draft, homeContent: { ...draft.homeContent, heroBadgeSubtitle: event.target.value } })} />
+                    </div>
+                  </div>
+
+                  <div className="rounded-xl p-4 border border-white/8 space-y-3" style={{ background: "rgba(255,255,255,0.02)" }}>
+                    <p className="text-white/60 text-[12px] uppercase tracking-[2px]">Label Kartu Hero</p>
+                    <div>
+                      {label("Label Jurusan")}
+                      <input className={inputCls} style={inputStyle} value={draft.homeContent.heroDetails.major} onChange={(event) => updateHomeGroup("heroDetails", "major", event.target.value)} />
+                    </div>
+                    <div>
+                      {label("Label Universitas")}
+                      <input className={inputCls} style={inputStyle} value={draft.homeContent.heroDetails.university} onChange={(event) => updateHomeGroup("heroDetails", "university", event.target.value)} />
+                    </div>
+                    <div>
+                      {label("Label Tahun / Angkatan")}
+                      <input className={inputCls} style={inputStyle} value={draft.homeContent.heroDetails.year} onChange={(event) => updateHomeGroup("heroDetails", "year", event.target.value)} />
+                    </div>
+                  </div>
+
+                  <div className="rounded-xl p-4 border border-white/8 space-y-3" style={{ background: "rgba(255,255,255,0.02)" }}>
+                    <p className="text-white/60 text-[12px] uppercase tracking-[2px]">Label Tombol Hero</p>
+                    <div>
+                      {label("Tombol Proyek")}
+                      <input className={inputCls} style={inputStyle} value={draft.homeContent.heroButtons.projects} onChange={(event) => updateHomeGroup("heroButtons", "projects", event.target.value)} />
+                    </div>
+                    <div>
+                      {label("Tombol Sertifikat")}
+                      <input className={inputCls} style={inputStyle} value={draft.homeContent.heroButtons.certificates} onChange={(event) => updateHomeGroup("heroButtons", "certificates", event.target.value)} />
+                    </div>
+                  </div>
+
+                  <div className="rounded-xl p-4 border border-white/8 space-y-3" style={{ background: "rgba(255,255,255,0.02)" }}>
+                    <p className="text-white/60 text-[12px] uppercase tracking-[2px]">Section Akademik</p>
+                    <div>
+                      {label("Eyebrow Akademik")}
+                      <input className={inputCls} style={inputStyle} value={draft.homeContent.academicEyebrow} onChange={(event) => setDraft({ ...draft, homeContent: { ...draft.homeContent, academicEyebrow: event.target.value } })} />
+                    </div>
+                    <div>
+                      {label("Judul Akademik")}
+                      <input className={inputCls} style={inputStyle} value={draft.homeContent.academicTitle} onChange={(event) => setDraft({ ...draft, homeContent: { ...draft.homeContent, academicTitle: event.target.value } })} />
+                    </div>
+                  </div>
+
+                  <div className="rounded-xl p-4 border border-white/8 space-y-3" style={{ background: "rgba(255,255,255,0.02)" }}>
+                    <p className="text-white/60 text-[12px] uppercase tracking-[2px]">Section Focus Area</p>
+                    <div>
+                      {label("Eyebrow Focus Area")}
+                      <input className={inputCls} style={inputStyle} value={draft.homeContent.focusEyebrow} onChange={(event) => setDraft({ ...draft, homeContent: { ...draft.homeContent, focusEyebrow: event.target.value } })} />
+                    </div>
+                    <div>
+                      {label("Judul Focus Area")}
+                      <input className={inputCls} style={inputStyle} value={draft.homeContent.focusTitle} onChange={(event) => setDraft({ ...draft, homeContent: { ...draft.homeContent, focusTitle: event.target.value } })} />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-5">
+                  <div className="rounded-xl p-4 border border-white/8 space-y-3" style={{ background: "rgba(255,255,255,0.02)" }}>
+                    <p className="text-white/60 text-[12px] uppercase tracking-[2px]">Kartu Akademik</p>
+                    {draft.homeContent.academicCards.map((item, index) => (
+                      <div key={`academic-card-${index}`} className="rounded-xl p-3 border border-white/8 space-y-2" style={{ background: "rgba(255,255,255,0.02)" }}>
+                        <div>
+                          {label(`Judul Kartu ${index + 1}`)}
+                          <input className={inputCls} style={inputStyle} value={item.title} onChange={(event) => updateHomeCard("academicCards", index, "title", event.target.value)} />
+                        </div>
+                        <div>
+                          {label(`Deskripsi Kartu ${index + 1}`)}
+                          <textarea className={inputCls} style={inputStyle} rows={2} value={item.desc} onChange={(event) => updateHomeCard("academicCards", index, "desc", event.target.value)} />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="rounded-xl p-4 border border-white/8 space-y-3" style={{ background: "rgba(255,255,255,0.02)" }}>
+                    <p className="text-white/60 text-[12px] uppercase tracking-[2px]">Section Portfolio Direction</p>
+                    <div>
+                      {label("Eyebrow Portfolio")}
+                      <input className={inputCls} style={inputStyle} value={draft.homeContent.portfolioEyebrow} onChange={(event) => setDraft({ ...draft, homeContent: { ...draft.homeContent, portfolioEyebrow: event.target.value } })} />
+                    </div>
+                    <div>
+                      {label("Judul Portfolio")}
+                      <input className={inputCls} style={inputStyle} value={draft.homeContent.portfolioTitle} onChange={(event) => setDraft({ ...draft, homeContent: { ...draft.homeContent, portfolioTitle: event.target.value } })} />
+                    </div>
+                    <div>
+                      {label("Deskripsi Portfolio")}
+                      <textarea className={inputCls} style={inputStyle} rows={4} value={draft.homeContent.portfolioDescription} onChange={(event) => setDraft({ ...draft, homeContent: { ...draft.homeContent, portfolioDescription: event.target.value } })} />
+                    </div>
+                    <div>
+                      {label("Tombol Organisasi")}
+                      <input className={inputCls} style={inputStyle} value={draft.homeContent.portfolioButtons.organization} onChange={(event) => updateHomeGroup("portfolioButtons", "organization", event.target.value)} />
+                    </div>
+                    <div>
+                      {label("Tombol Kontak")}
+                      <input className={inputCls} style={inputStyle} value={draft.homeContent.portfolioButtons.contact} onChange={(event) => updateHomeGroup("portfolioButtons", "contact", event.target.value)} />
+                    </div>
+                  </div>
+
+                  <div className="rounded-xl p-4 border border-white/8 space-y-3" style={{ background: "rgba(255,255,255,0.02)" }}>
+                    <p className="text-white/60 text-[12px] uppercase tracking-[2px]">Kartu Portfolio Direction</p>
+                    {draft.homeContent.portfolioCards.map((item, index) => (
+                      <div key={`portfolio-card-${index}`} className="rounded-xl p-3 border border-white/8 space-y-2" style={{ background: "rgba(255,255,255,0.02)" }}>
+                        <div>
+                          {label(`Judul Kartu ${index + 1}`)}
+                          <input className={inputCls} style={inputStyle} value={item.title} onChange={(event) => updateHomeCard("portfolioCards", index, "title", event.target.value)} />
+                        </div>
+                        <div>
+                          {label(`Deskripsi Kartu ${index + 1}`)}
+                          <textarea className={inputCls} style={inputStyle} rows={2} value={item.desc} onChange={(event) => updateHomeCard("portfolioCards", index, "desc", event.target.value)} />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-3 p-4 sm:p-6 border-t border-white/8">
@@ -329,7 +509,7 @@ function EditProfileModal({
 export function Home() {
   const { personalInfo, updatePersonalInfo, isAdmin } = useData();
   const [editOpen, setEditOpen] = useState(false);
-  const [draft, setDraft] = useState<PersonalInfo>(personalInfo);
+  const [draft, setDraft] = useState<PersonalInfo>(() => clonePersonalInfo(personalInfo));
 
   const profileSrc = personalInfo.photo.trim() || profileImgDefault;
   const socialLinks = [
@@ -339,13 +519,13 @@ export function Home() {
   ].filter(Boolean) as { icon: typeof Linkedin; label: string; href: string }[];
 
   const quickDetails = [
-    { label: "Jurusan", value: personalInfo.major },
-    { label: "Universitas", value: personalInfo.university },
-    { label: "Angkatan", value: personalInfo.year },
+    { label: personalInfo.homeContent.heroDetails.major, value: personalInfo.major },
+    { label: personalInfo.homeContent.heroDetails.university, value: personalInfo.university },
+    { label: personalInfo.homeContent.heroDetails.year, value: personalInfo.year },
   ];
 
   function openEdit() {
-    setDraft({ ...personalInfo });
+    setDraft(clonePersonalInfo(personalInfo));
     setEditOpen(true);
   }
 
@@ -423,10 +603,10 @@ export function Home() {
 
             <div className="flex flex-wrap gap-4 mb-8">
               <Link to="/projects" className="inline-flex w-full sm:w-auto justify-center items-center gap-2 px-6 py-3 rounded-xl text-[14px] text-black font-medium transition-all hover:scale-105" style={{ background: "linear-gradient(135deg, #FBBF24, #F59E0B)" }}>
-                Lihat Proyek <ArrowRight size={16} />
+                {personalInfo.homeContent.heroButtons.projects} <ArrowRight size={16} />
               </Link>
               <Link to="/certificates" className="inline-flex w-full sm:w-auto justify-center items-center gap-2 border border-white/15 text-white/70 px-6 py-3 rounded-xl text-[14px] hover:border-amber-400/30 hover:text-white transition-all">
-                Lihat Sertifikat <ArrowRight size={16} />
+                {personalInfo.homeContent.heroButtons.certificates} <ArrowRight size={16} />
               </Link>
               {isAdmin && (
                 <button onClick={openEdit} className="inline-flex w-full sm:w-auto justify-center items-center gap-2 border border-amber-400/25 text-amber-400 px-6 py-3 rounded-xl text-[14px] hover:bg-amber-400/10 transition-all">
@@ -478,8 +658,8 @@ export function Home() {
                   <div className="flex items-center gap-2">
                     <TrendingUp size={14} className="text-green-400" />
                     <div>
-                      <p className="text-white/75 text-[12px]">Capital Market Track</p>
-                      <p className="text-white/30 text-[11px]">Finance oriented portfolio</p>
+                      <p className="text-white/75 text-[12px]">{personalInfo.homeContent.heroBadgeTitle}</p>
+                      <p className="text-white/30 text-[11px]">{personalInfo.homeContent.heroBadgeSubtitle}</p>
                     </div>
                   </div>
                 </motion.div>
@@ -507,17 +687,17 @@ export function Home() {
       <section className="py-14 sm:py-20 border-t border-white/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <motion.p initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-amber-400 text-[13px] tracking-[3px] uppercase mb-3">
-            Academic Profile
+            {personalInfo.homeContent.academicEyebrow}
           </motion.p>
           <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-[32px] md:text-[38px] tracking-tight mb-10" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 600 }}>
-            Fondasi Akademik dan Arah Pengembangan
+            {personalInfo.homeContent.academicTitle}
           </motion.h2>
 
           <div className="grid md:grid-cols-3 gap-5 mb-10">
             {[
-              { title: "Jurusan", value: personalInfo.major, desc: "Bidang studi utama yang membentuk fokus analisis dan kerangka berpikir bisnis." },
-              { title: "Universitas", value: personalInfo.university, desc: "Lingkungan akademik tempat perjalanan belajar, riset, dan organisasi berkembang." },
-              { title: "Tahun Studi", value: personalInfo.year, desc: "Rentang perjalanan yang menjadi konteks untuk proyek, sertifikat, dan pengalaman organisasi." },
+              { ...personalInfo.homeContent.academicCards[0], value: personalInfo.major },
+              { ...personalInfo.homeContent.academicCards[1], value: personalInfo.university },
+              { ...personalInfo.homeContent.academicCards[2], value: personalInfo.year },
             ].map((item) => (
               <div key={item.title} className="rounded-2xl p-5 sm:p-6 border border-white/6" style={{ background: "rgba(6, 23, 40, 0.62)" }}>
                 <p className="text-white/30 text-[11px] uppercase tracking-[2px] mb-2">{item.title}</p>
@@ -550,10 +730,10 @@ export function Home() {
       <section className="py-16 sm:py-24 border-t border-white/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <motion.p initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-amber-400 text-[13px] tracking-[3px] uppercase mb-3">
-            Focus Areas
+            {personalInfo.homeContent.focusEyebrow}
           </motion.p>
           <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-[32px] md:text-[38px] tracking-tight mb-12" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 600 }}>
-            Bidang Yang Sedang Saya Kembangkan
+            {personalInfo.homeContent.focusTitle}
           </motion.h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {personalInfo.skills.map((skill, index) => {
@@ -578,27 +758,27 @@ export function Home() {
             <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at center top, rgba(251,191,36,0.12) 0%, transparent 60%)" }} />
             <div className="relative grid lg:grid-cols-[1.2fr_0.8fr] gap-8 items-center">
               <div>
-                <p className="text-amber-400 text-[13px] tracking-[3px] uppercase mb-4">Portfolio Direction</p>
+                <p className="text-amber-400 text-[13px] tracking-[3px] uppercase mb-4">{personalInfo.homeContent.portfolioEyebrow}</p>
                 <h2 className="text-[32px] md:text-[42px] tracking-tight mb-4" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 600 }}>
-                  Jelajahi Jejak Belajar Yang Terdokumentasi
+                  {personalInfo.homeContent.portfolioTitle}
                 </h2>
                 <p className="text-white/52 text-[15px] leading-relaxed max-w-2xl mb-8">
-                  Dari proyek analisis keuangan, sertifikat pelatihan, hingga pengalaman organisasi, seluruh bagian portfolio ini dirancang untuk menunjukkan proses belajar yang terarah dan relevan dengan bidang finance.
+                  {personalInfo.homeContent.portfolioDescription}
                 </p>
                 <div className="flex flex-wrap gap-4">
                   <Link to="/organization" className="inline-flex w-full sm:w-auto justify-center items-center gap-2 px-6 py-3 rounded-xl text-[14px] text-black font-medium transition-all hover:scale-105" style={{ background: "linear-gradient(135deg, #FBBF24, #F59E0B)" }}>
-                    Lihat Organisasi <ArrowRight size={16} />
+                    {personalInfo.homeContent.portfolioButtons.organization} <ArrowRight size={16} />
                   </Link>
                   <Link to="/contact" className="inline-flex w-full sm:w-auto justify-center items-center gap-2 border border-white/15 text-white/70 px-6 py-3 rounded-xl text-[14px] hover:border-amber-400/30 hover:text-white transition-all">
-                    Hubungi Saya <ArrowRight size={16} />
+                    {personalInfo.homeContent.portfolioButtons.contact} <ArrowRight size={16} />
                   </Link>
                 </div>
               </div>
               <div className="grid gap-4">
                 {[
-                  { icon: TrendingUp, title: "Proyek Analisis", desc: "Studi kasus yang menekankan rasio keuangan, valuasi, dan logika keputusan bisnis." },
-                  { icon: BarChart3, title: "Catatan Sertifikasi", desc: "Rekam pembelajaran formal maupun pelatihan tambahan yang mendukung arah profesi." },
-                  { icon: Users, title: "Eksposur Organisasi", desc: "Pengalaman lapangan yang melatih koordinasi, kepemimpinan, dan literasi pasar modal." },
+                  { icon: TrendingUp, ...personalInfo.homeContent.portfolioCards[0] },
+                  { icon: BarChart3, ...personalInfo.homeContent.portfolioCards[1] },
+                  { icon: Users, ...personalInfo.homeContent.portfolioCards[2] },
                 ].map((item) => (
                   <div key={item.title} className="rounded-2xl border border-white/8 p-4" style={{ background: "rgba(6, 23, 40, 0.58)" }}>
                     <div className="flex items-start gap-3">

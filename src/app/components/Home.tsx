@@ -26,9 +26,9 @@ import {
 } from "lucide-react";
 import { useData, type PersonalInfo } from "./DataContext";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
-import profileImgDefault from "../../imports/WhatsApp_Image_2026-04-18_at_17.25.30.jpeg";
 
 const SKILL_ICONS = [LineChart, Landmark, Users, BookOpenCheck, TrendingUp, BarChart3, GraduationCap];
+const profileImgDefault = new URL("../../imports/WhatsApp_Image_2026-04-18_at_17.25.30.jpeg", import.meta.url).href;
 
 function clonePersonalInfo(personalInfo: PersonalInfo): PersonalInfo {
   return {

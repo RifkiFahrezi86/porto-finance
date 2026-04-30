@@ -1,4 +1,4 @@
-import { get, put } from "@vercel/blob";
+import { list, put } from "@vercel/blob";
 
 export const config = {
   api: {
@@ -14,10 +14,32 @@ function isBlobConfigured() {
   return Boolean(process.env.BLOB_READ_WRITE_TOKEN);
 }
 
-async function readSnapshot(result) {
-  if (!result?.stream) return null;
+async function findSnapshotBlob() {
+  const result = await list({
+    prefix: SNAPSHOT_PATH,
+    limit: 10,
+  });
 
-  const text = await new Response(result.stream).text();
+  return result.blobs.find((blob) => blob.pathname === SNAPSHOT_PATH) ?? null;
+}
+
+async function readSnapshot(blob) {
+  if (!blob?.url) return null;
+
+  const snapshotUrl = new URL(blob.url);
+  snapshotUrl.searchParams.set("v", String(blob.uploadedAt.getTime()));
+
+  const response = await fetch(snapshotUrl, {
+    headers: {
+      "cache-control": "no-cache",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to read portfolio snapshot: ${response.status}`);
+  }
+
+  const text = await response.text();
   if (!text) return null;
 
   return JSON.parse(text);
@@ -32,8 +54,8 @@ export default async function handler(req, res) {
 
   if (req.method === "GET") {
     try {
-      const result = await get(SNAPSHOT_PATH, { access: "public" });
-      const data = result ? await readSnapshot(result) : null;
+      const blob = await findSnapshotBlob();
+      const data = blob ? await readSnapshot(blob) : null;
       return res.status(200).json({ data });
     } catch (error) {
       return res.status(500).json({
